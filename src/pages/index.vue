@@ -6,12 +6,17 @@
 				name="Import Data"
 				@click="importData"
 			/>
+			<Button
+				name="Board Page"
+				@click="toBoardPage"
+			/>
 		</div>
 	</div>
 </template>
 
 <script>
     import { mapActions } from 'vuex';
+    import router from '../router';
     import Button from '../components/Button';
 
     export default {
@@ -26,6 +31,10 @@
 
             importData() {
                 this.importSpecialistData();
+            },
+
+            toBoardPage() {
+                router.push('/board');
             },
         },
     }

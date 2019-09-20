@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Admin from './pages/index';
+import Board from './pages/board/index';
 
 Vue.use(Router);
 
@@ -12,5 +13,9 @@ export default new Router({
             path: '/',
             component: Admin,
         },
+        {
+            path: '/board',
+            component: Board,
+        }
     ],
 });

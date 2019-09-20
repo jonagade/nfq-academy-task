@@ -3,11 +3,20 @@ import axios from 'axios';
 export default {
     state: {
         specialistDataArray: [],
+        specialists: [
+            'Specialist 1',
+            'Specialist 2',
+            'Specialist 3',
+        ],
     },
 
     getters: {
         specialistDataArray(state) {
             return state.specialistDataArray;
+        },
+
+        specialists(state) {
+            return state.specialists;
         },
     },
 

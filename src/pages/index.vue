@@ -10,6 +10,10 @@
 				name="Board Page"
 				@click="toBoardPage"
 			/>
+			<Button
+				name="Specialist Page"
+				@click="toSpecialistPage"
+			/>
 		</div>
 	</div>
 </template>
@@ -35,6 +39,10 @@
 
             toBoardPage() {
                 router.push('/board');
+            },
+
+            toSpecialistPage() {
+                router.push('/specialist');
             },
         },
     }

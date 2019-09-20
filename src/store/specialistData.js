@@ -23,7 +23,7 @@ export default {
     mutations: {
         setSpecialistData(state, payload) {
             state.specialistDataArray = payload;
-        }
+        },
     },
 
     actions: {
@@ -48,6 +48,12 @@ export default {
             }).then(() => {
                 dispatch('refreshData');
             })
+        },
+
+        removeCustomer({dispatch, state}, payload) {
+            let keyName = localStorage.key(payload);
+            localStorage.removeItem(keyName);
+            dispatch('refreshData');
         },
     },
 }

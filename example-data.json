@@ -1,0 +1,26 @@
+[
+    {
+        "specialist": "Specialist 1",
+        "customer": "101"
+    },
+    {
+        "specialist": "Specialist 1",
+        "customer": "102"
+    },
+    {
+        "specialist": "Specialist 2",
+        "customer": "201"
+    },
+    {
+        "specialist": "Specialist 2",
+        "customer": "202"
+    },
+    {
+        "specialist": "Specialist 3",
+        "customer": "301"
+    },
+    {
+        "specialist": "Specialist 3",
+        "customer": "302"
+    }
+]

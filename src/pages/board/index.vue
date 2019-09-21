@@ -9,7 +9,10 @@
 				<th>{{ specialist }}</th>
 				</thead>
 				<tbody class="text-center">
-				<tr v-for="item in filteredCustomers(specialist)">
+				<tr
+					class="first-customer"
+					v-for="item in filteredCustomers(specialist)"
+				>
 					<td>{{ item.customer }}</td>
 				</tr>
 				</tbody>
@@ -40,3 +43,7 @@
         },
     }
 </script>
+
+<style scoped lang="scss">
+	@import '../../assets/styles/board';
+</style>

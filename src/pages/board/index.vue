@@ -32,7 +32,9 @@
         methods: {
             filteredCustomers(specialist) {
                 return this.specialistDataArray.filter(element => {
-                    return element.specialist === specialist;
+                    if (!element.served) {
+                        return element.specialist === specialist;
+                    }
                 }).sort((a, b) => (a.customer > b.customer) ? 1 : ((a.customer < b.customer) ? -1 : 0));
             }
         },

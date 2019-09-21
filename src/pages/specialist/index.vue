@@ -15,11 +15,14 @@
 				<tbody class="text-center">
 				<tr v-for="item in selectedSpecialistData">
 					<td>{{ item.customer }}</td>
-					<td>
+					<td v-show="!item.served">
 						<Button
 							name="Served"
 							@click="customerServed(item)"
 						/>
+					</td>
+					<td v-show="item.served">
+						<span>Served</span>
 					</td>
 				</tr>
 				</tbody>
@@ -47,7 +50,7 @@
 
         methods: {
             ...mapActions([
-                'removeCustomer',
+                'updateCustomer',
             ]),
 
             customerServed(customer) {
@@ -55,8 +58,12 @@
                     return el === customer;
                 }
 
-                let removableCustomer = this.specialistDataArray.findIndex(search);
-                this.removeCustomer(removableCustomer);
+                let servedCustomer = this.specialistDataArray.findIndex(search);
+                const payload = {
+                    ...customer,
+	                servedCustomer,
+                };
+                this.updateCustomer(payload);
             },
         },
 

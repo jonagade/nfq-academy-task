@@ -50,9 +50,19 @@ export default {
             })
         },
 
-        removeCustomer({dispatch, state}, payload) {
-            let keyName = localStorage.key(payload);
+        updateCustomer({dispatch}, payload) {
+            let keyName = localStorage.key(payload.servedCustomer);
             localStorage.removeItem(keyName);
+            dispatch('updateCustomerStatus', payload);
+        },
+
+        updateCustomerStatus({dispatch}, payload) {
+            const updatedCustomer = {
+                specialist: payload.specialist,
+                customer: payload.customer,
+                served: true,
+            };
+            localStorage.setItem(payload.servedCustomer, JSON.stringify(updatedCustomer));
             dispatch('refreshData');
         },
     },

@@ -10,6 +10,7 @@ export default {
             'Specialist 3',
         ],
         registrationMessage: '',
+        errorMessage: '',
     },
 
     getters: {
@@ -28,6 +29,10 @@ export default {
         registrationMessage(state) {
             return state.registrationMessage;
         },
+
+        errorMessage(state) {
+            return state.errorMessage;
+        },
     },
 
     mutations: {
@@ -41,7 +46,11 @@ export default {
 
         setRegistrationMessage(state, payload) {
             state.registrationMessage = payload;
-        }
+        },
+
+        setErrorMessage(state, payload) {
+            state.errorMessage = payload;
+        },
     },
 
     actions: {
@@ -58,13 +67,15 @@ export default {
             commit('setDataIsImported', true);
         },
 
-        importSpecialistData({dispatch}) {
+        importSpecialistData({dispatch, commit}) {
             axios.get('https://api.myjson.com/bins/hfo11').then(response => {
                 response.data.forEach((item, i) => {
                     localStorage.setItem('item' + i, JSON.stringify(item));
                 })
             }).then(() => {
                 dispatch('refreshData');
+            }).catch(() => {
+                commit('setErrorMessage', 'Customer data import failed. Please try again later.')
             })
         },
 

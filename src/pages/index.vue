@@ -77,7 +77,7 @@
 	        createNewCustomer() {
                 const customer = {
                     specialist: this.selectedSpecialist,
-	                code: this.selectedSpecialistCode,
+	                code: Number(this.selectedSpecialistCode),
                 };
                 this.createCustomer(customer);
 	        }
@@ -94,7 +94,7 @@
                 return this.specialists.map((specialist, i) => {
                     return {
                         name: specialist,
-	                    code: i + 1 + '0',
+	                    code: i + 1 + '00',
                     }
                 })
 		    },

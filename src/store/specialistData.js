@@ -89,7 +89,7 @@ export default {
             });
             const customerData = {
                 specialist: payload.specialist,
-                customer: payload.code + (currentSpecialistCustomers.length + 1),
+                customer: String(payload.code + currentSpecialistCustomers.length + 1),
             };
             localStorage.setItem('item' + state.specialistDataArray.length, JSON.stringify(customerData));
             dispatch('refreshData');

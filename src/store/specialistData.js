@@ -9,6 +9,7 @@ export default {
             'Specialist 2',
             'Specialist 3',
         ],
+        registrationMessage: '',
     },
 
     getters: {
@@ -23,6 +24,10 @@ export default {
         isDataImported(state) {
             return state.isDataImported;
         },
+
+        registrationMessage(state) {
+            return state.registrationMessage;
+        },
     },
 
     mutations: {
@@ -32,6 +37,10 @@ export default {
 
         setDataIsImported(state, payload) {
             state.isDataImported = payload;
+        },
+
+        setRegistrationMessage(state, payload) {
+            state.registrationMessage = payload;
         }
     },
 
@@ -74,7 +83,7 @@ export default {
             dispatch('refreshData');
         },
 
-        createCustomer({dispatch, state}, payload) {
+        createCustomer({dispatch, state, commit}, payload) {
             let currentSpecialistCustomers = state.specialistDataArray.filter(element => {
                 return element.specialist === payload.specialist;
             });
@@ -84,6 +93,7 @@ export default {
             };
             localStorage.setItem('item' + state.specialistDataArray.length, JSON.stringify(customerData));
             dispatch('refreshData');
+            commit('setRegistrationMessage', `Registration was successful. Your number is: ${customerData.customer}`);
         },
     },
 }

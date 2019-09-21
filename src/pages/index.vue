@@ -31,6 +31,9 @@
 					@click="createNewCustomer"
 				/>
 			</div>
+			<div class="row mt-3 justify-content-center">
+				<span>{{ registrationMessage }}</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -84,6 +87,7 @@
             ...mapGetters([
                 'specialists',
 	            'isDataImported',
+	            'registrationMessage',
             ]),
 
 		    specialistsWithCode() {

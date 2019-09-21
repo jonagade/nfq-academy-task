@@ -17,6 +17,9 @@
 				v-show="isDataImported"
 			/>
 		</div>
+		<div class="row justify-content-center mt-3">
+			<span>{{ errorMessage }}</span>
+		</div>
 		<div v-show="isDataImported">
 			<div class="row mt-3">
 				<Select
@@ -88,6 +91,7 @@
                 'specialists',
 	            'isDataImported',
 	            'registrationMessage',
+	            'errorMessage',
             ]),
 
 		    specialistsWithCode() {

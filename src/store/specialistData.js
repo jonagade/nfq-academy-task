@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export default {
     state: {
+        isDataImported: false,
         specialistDataArray: [],
         specialists: [
             'Specialist 1',
@@ -18,12 +19,20 @@ export default {
         specialists(state) {
             return state.specialists;
         },
+
+        isDataImported(state) {
+            return state.isDataImported;
+        },
     },
 
     mutations: {
         setSpecialistData(state, payload) {
             state.specialistDataArray = payload;
         },
+
+        setDataIsImported(state, payload) {
+            state.isDataImported = payload;
+        }
     },
 
     actions: {
@@ -37,6 +46,7 @@ export default {
                 }
             }
             commit('setSpecialistData', dataArray);
+            commit('setDataIsImported', true);
         },
 
         importSpecialistData({dispatch}) {
@@ -61,6 +71,18 @@ export default {
                 served: true,
             };
             localStorage.setItem('item' + payload.servedCustomer, JSON.stringify(updatedCustomer));
+            dispatch('refreshData');
+        },
+
+        createCustomer({dispatch, state}, payload) {
+            let currentSpecialistCustomers = state.specialistDataArray.filter(element => {
+                return element.specialist === payload.specialist;
+            });
+            const customerData = {
+                specialist: payload.specialist,
+                customer: payload.code + (currentSpecialistCustomers.length + 1),
+            };
+            localStorage.setItem('item' + state.specialistDataArray.length, JSON.stringify(customerData));
             dispatch('refreshData');
         },
     },

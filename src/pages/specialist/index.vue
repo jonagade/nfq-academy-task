@@ -48,9 +48,14 @@
             }
         },
 
+	    mounted() {
+            this.refreshData();
+	    },
+
         methods: {
             ...mapActions([
                 'updateCustomer',
+	            'refreshData',
             ]),
 
             customerServed(customer) {

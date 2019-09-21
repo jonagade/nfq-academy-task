@@ -31,8 +31,7 @@ export default {
             state.specialistDataArray = [];
             let dataArray = [];
             for (let i = 0; i < localStorage.length; i++) {
-                let keyName = localStorage.key(i);
-                let item = JSON.parse(localStorage.getItem(keyName));
+                let item = JSON.parse(localStorage.getItem('item' + i));
                 if (item !== null) {
                     dataArray.push(item);
                 }
@@ -43,7 +42,7 @@ export default {
         importSpecialistData({dispatch}) {
             axios.get('https://api.myjson.com/bins/hfo11').then(response => {
                 response.data.forEach((item, i) => {
-                    localStorage.setItem(i, JSON.stringify(item));
+                    localStorage.setItem('item' + i, JSON.stringify(item));
                 })
             }).then(() => {
                 dispatch('refreshData');
@@ -51,8 +50,7 @@ export default {
         },
 
         updateCustomer({dispatch}, payload) {
-            let keyName = localStorage.key(payload.servedCustomer);
-            localStorage.removeItem(keyName);
+            localStorage.removeItem('item' + payload.servedCustomer);
             dispatch('updateCustomerStatus', payload);
         },
 
@@ -62,7 +60,7 @@ export default {
                 customer: payload.customer,
                 served: true,
             };
-            localStorage.setItem(payload.servedCustomer, JSON.stringify(updatedCustomer));
+            localStorage.setItem('item' + payload.servedCustomer, JSON.stringify(updatedCustomer));
             dispatch('refreshData');
         },
     },

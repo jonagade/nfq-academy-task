@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         computed: {
@@ -32,7 +32,15 @@
             ]),
         },
 
+	    mounted() {
+            this.refreshData();
+	    },
+
         methods: {
+            ...mapActions([
+                'refreshData',
+            ]),
+
             filteredCustomers(specialist) {
                 return this.specialistDataArray.filter(element => {
                     if (!element.served) {

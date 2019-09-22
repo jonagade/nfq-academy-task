@@ -16,6 +16,11 @@
 				@click="toSpecialistPage"
 				v-show="isDataImported"
 			/>
+<!--			<Button-->
+<!--				name="Customer Page"-->
+<!--				@click="toCustomerPage"-->
+<!--				v-show="isDataImported"-->
+<!--			/>-->
 		</div>
 		<div class="row justify-content-center mt-3">
 			<span>{{ errorMessage }}</span>
@@ -66,7 +71,8 @@
             ]),
 
             importData() {
-                this.importSpecialistData();
+                const workStarted = Math.floor(Date.now() / 1000);
+                this.importSpecialistData(workStarted);
             },
 
             toBoardPage() {
@@ -76,6 +82,10 @@
             toSpecialistPage() {
                 router.push('/specialist');
             },
+
+	        toCustomerPage() {
+                router.push('/customer');
+	        },
 
 	        createNewCustomer() {
                 const customer = {

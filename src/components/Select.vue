@@ -5,7 +5,7 @@
 		</div>
 		<select
 			id="select"
-			class="custom-select col-4"
+			class="custom-select col-md-4"
 			v-model="selectedValue"
 			@change="$emit('update:model', selectedValue)"
 		>

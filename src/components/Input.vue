@@ -6,6 +6,7 @@
 			:placeholder="placeholder"
 			v-model="inputValue"
 			@input="$emit('update:model', inputValue)"
+			@change="$emit('change')"
 		>
 	</div>
 </template>

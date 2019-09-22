@@ -34,6 +34,10 @@ export default {
         errorMessage(state) {
             return state.errorMessage;
         },
+
+        timePerSpecialist(state) {
+            return state.timePerSpecialist;
+        }
     },
 
     mutations: {
@@ -82,15 +86,28 @@ export default {
         },
 
         importSpecialistData({dispatch, commit, state}, payload) {
-            let workStarted = state.specialists.map(specialist => {
-                return {
-                    specialist: specialist,
-                    timestamp: payload,
-                }
-            });
-            axios.get('https://api.myjson.com/bins/yjtfl').then(response => {
+            axios.get('https://api.myjson.com/bins/ipa2x').then(response => {
                 response.data.forEach((item, i) => {
                     localStorage.setItem('item' + i, JSON.stringify(item));
+                });
+                let customerDataBySpecialist = state.specialists.map(specialist => {
+                    return {
+                        specialist: specialist,
+                        specialistData: response.data.filter(element => {
+                            return element.specialist === specialist;
+                        })
+                    }
+                });
+                let workStarted = state.specialists.map(specialist => {
+                    let currentSpecialist = customerDataBySpecialist.find(element => {
+                        return element.specialist === specialist;
+                    }).specialistData;
+                    const average = currentSpecialist.reduce((total, next) => total + next.timeSpent, 0) / currentSpecialist.length;
+                    return {
+                        specialist: specialist,
+                        averageTime: average,
+                        timestamp: payload,
+                    }
                 });
                 workStarted.forEach((specialist, i) => {
                     localStorage.setItem('specialist' + Number(i + 1), JSON.stringify(specialist));
@@ -110,6 +127,7 @@ export default {
             let specialistNumber = state.timePerSpecialist.indexOf(specialist);
             const updatedSpecialist = {
                 specialist: specialist.specialist,
+                averageTime: specialist.averageTime,
                 timestamp: payload.serveTimestamp,
             };
             localStorage.removeItem('specialist' + Number(specialistNumber + 1));
@@ -139,6 +157,7 @@ export default {
             const customerData = {
                 specialist: payload.specialist,
                 customer: String(payload.code + currentSpecialistCustomers.length + 1),
+                creationTimestamp: payload.creationTimestamp,
             };
             localStorage.setItem('item' + state.specialistDataArray.length, JSON.stringify(customerData));
             dispatch('refreshData');

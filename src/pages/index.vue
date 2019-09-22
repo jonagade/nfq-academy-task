@@ -16,11 +16,11 @@
 				@click="toSpecialistPage"
 				v-show="isDataImported"
 			/>
-<!--			<Button-->
-<!--				name="Customer Page"-->
-<!--				@click="toCustomerPage"-->
-<!--				v-show="isDataImported"-->
-<!--			/>-->
+			<Button
+				name="Customer Page"
+				@click="toCustomerPage"
+				v-show="isDataImported"
+			/>
 		</div>
 		<div class="row justify-content-center mt-3">
 			<span>{{ errorMessage }}</span>
@@ -91,6 +91,7 @@
                 const customer = {
                     specialist: this.selectedSpecialist,
 	                code: Number(this.selectedSpecialistCode),
+	                creationTimestamp: Math.floor(Date.now() / 1000),
                 };
                 this.createCustomer(customer);
 	        }

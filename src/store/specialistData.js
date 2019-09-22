@@ -11,6 +11,7 @@ export default {
         ],
         registrationMessage: '',
         errorMessage: '',
+        timePerSpecialist: [],
     },
 
     getters: {
@@ -51,11 +52,16 @@ export default {
         setErrorMessage(state, payload) {
             state.errorMessage = payload;
         },
+
+        setTimePerSpecialist(state, payload) {
+            state.timePerSpecialist = payload;
+        },
     },
 
     actions: {
         refreshData({commit, state}) {
             state.specialistDataArray = [];
+            state.timePerSpecialist = [];
             let dataArray = [];
             for (let i = 0; i < localStorage.length; i++) {
                 let item = JSON.parse(localStorage.getItem('item' + i));
@@ -63,15 +69,32 @@ export default {
                     dataArray.push(item);
                 }
             }
+            let specialistTimeArray = [];
+            for (let i = 1; i < localStorage.length; i++) {
+                let specialist = JSON.parse(localStorage.getItem('specialist' + i));
+                if (specialist !== null) {
+                    specialistTimeArray.push(specialist);
+                }
+            }
             commit('setSpecialistData', dataArray);
+            commit('setTimePerSpecialist', specialistTimeArray);
             commit('setDataIsImported', true);
         },
 
-        importSpecialistData({dispatch, commit}) {
-            axios.get('https://api.myjson.com/bins/hfo11').then(response => {
+        importSpecialistData({dispatch, commit, state}, payload) {
+            let workStarted = state.specialists.map(specialist => {
+                return {
+                    specialist: specialist,
+                    timestamp: payload,
+                }
+            });
+            axios.get('https://api.myjson.com/bins/yjtfl').then(response => {
                 response.data.forEach((item, i) => {
                     localStorage.setItem('item' + i, JSON.stringify(item));
-                })
+                });
+                workStarted.forEach((specialist, i) => {
+                    localStorage.setItem('specialist' + Number(i + 1), JSON.stringify(specialist));
+                });
             }).then(() => {
                 dispatch('refreshData');
             }).catch(() => {
@@ -79,18 +102,33 @@ export default {
             })
         },
 
-        updateCustomer({dispatch}, payload) {
-            localStorage.removeItem('item' + payload.servedCustomer);
-            dispatch('updateCustomerStatus', payload);
+        updateCustomer({dispatch, state}, payload) {
+            localStorage.removeItem('item' + payload.servedCustomerIndex);
+            let specialist = state.timePerSpecialist.find(element => {
+                return element.specialist === payload.specialist;
+            });
+            let specialistNumber = state.timePerSpecialist.indexOf(specialist);
+            const updatedSpecialist = {
+                specialist: specialist.specialist,
+                timestamp: payload.serveTimestamp,
+            };
+            localStorage.removeItem('specialist' + Number(specialistNumber + 1));
+            localStorage.setItem('specialist' + Number(specialistNumber + 1), JSON.stringify(updatedSpecialist));
+            const customerUpdate = {
+                ...payload,
+                ...specialist,
+            };
+            dispatch('updateCustomerStatus', customerUpdate);
         },
 
-        updateCustomerStatus({dispatch}, payload) {
+        updateCustomerStatus({dispatch, state}, payload) {
             const updatedCustomer = {
                 specialist: payload.specialist,
                 customer: payload.customer,
                 served: true,
+                timeSpent: payload.serveTimestamp - payload.timestamp,
             };
-            localStorage.setItem('item' + payload.servedCustomer, JSON.stringify(updatedCustomer));
+            localStorage.setItem('item' + payload.servedCustomerIndex, JSON.stringify(updatedCustomer));
             dispatch('refreshData');
         },
 

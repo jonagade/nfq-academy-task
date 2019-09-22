@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Admin from './pages/index';
 import Board from './pages/board/index';
 import Specialist from './pages/specialist/index';
+import Customer from './pages/customer/index';
 
 Vue.use(Router);
 
@@ -21,6 +22,10 @@ export default new Router({
         {
             path: '/specialist',
             component: Specialist,
+        },
+        {
+            path: '/customer',
+            component: Customer,
         },
     ],
 });

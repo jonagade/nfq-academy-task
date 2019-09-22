@@ -14,15 +14,12 @@
 				</thead>
 				<tbody class="text-center">
 				<tr v-for="item in selectedSpecialistData">
-					<td>{{ item.customer }}</td>
+					<td v-show="!item.served">{{ item.customer }}</td>
 					<td v-show="!item.served">
 						<Button
 							name="Served"
 							@click="customerServed(item)"
 						/>
-					</td>
-					<td v-show="item.served">
-						<span>Served</span>
 					</td>
 				</tr>
 				</tbody>
@@ -63,10 +60,11 @@
                     return el === customer;
                 }
 
-                let servedCustomer = this.specialistDataArray.findIndex(search);
+                let servedCustomerIndex = this.specialistDataArray.findIndex(search);
                 const payload = {
                     ...customer,
-	                servedCustomer,
+	                servedCustomerIndex,
+	                serveTimestamp: Math.floor(Date.now() / 1000),
                 };
                 this.updateCustomer(payload);
             },

@@ -1,20 +1,20 @@
 <template>
 	<div>
-		<div class="row justify-content-center">
+		<div class="row justify-content-around">
 			<table
-				class="table table-bordered col-4"
-				v-for="specialist in specialists"
+				class="table table-bordered col-3"
+				v-for="element in timePerSpecialist"
 			>
 				<thead class="text-center">
-				<th>{{ specialist }}</th>
+					<th>{{ element.specialist }} Time until next meeting approx.: {{ element.averageTime }} s</th>
 				</thead>
 				<tbody class="text-center">
-				<tr
-					class="first-customer"
-					v-for="item in filteredCustomers(specialist)"
-				>
-					<td>{{ item.customer }}</td>
-				</tr>
+					<tr
+						class="first-customer"
+						v-for="item in filteredCustomers(element.specialist)"
+					>
+						<td>{{ item.customer }}</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -25,13 +25,6 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
-        computed: {
-            ...mapGetters([
-                'specialists',
-                'specialistDataArray',
-            ]),
-        },
-
 	    mounted() {
             this.refreshData();
 	    },
@@ -47,7 +40,14 @@
                         return element.specialist === specialist;
                     }
                 }).sort((a, b) => (a.customer > b.customer) ? 1 : ((a.customer < b.customer) ? -1 : 0));
-            }
+            },
+        },
+
+        computed: {
+            ...mapGetters([
+                'specialistDataArray',
+	            'timePerSpecialist'
+            ]),
         },
     }
 </script>

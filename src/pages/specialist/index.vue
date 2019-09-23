@@ -13,7 +13,7 @@
 					<th>Action</th>
 				</thead>
 				<tbody class="text-center">
-					<tr v-for="item in selectedSpecialistData">
+					<tr v-for="(item, i) in selectedSpecialistData" :key="i">
 						<td v-show="!item.served">{{ item.customer }}</td>
 						<td v-show="!item.served">
 							<Button

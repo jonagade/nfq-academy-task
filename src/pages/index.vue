@@ -42,6 +42,7 @@
 			</div>
 			<div class="row mt-3 justify-content-center">
 				<Button
+					v-show="selectedSpecialist != null"
 					name="Register"
 					classes="btn-success"
 					@click="createNewCustomer"

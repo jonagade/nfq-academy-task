@@ -3,7 +3,8 @@
 		<div class="row justify-content-around">
 			<table
 				class="table table-bordered col-3"
-				v-for="element in timePerSpecialist"
+				v-for="(element, i) in timePerSpecialist"
+				:key="i"
 			>
 				<thead class="text-center">
 					<th>{{ element.specialist }} Time until next meeting approx.: {{ element.averageTime }} s</th>
@@ -11,7 +12,8 @@
 				<tbody class="text-center">
 					<tr
 						class="first-customer"
-						v-for="item in filteredCustomers(element.specialist)"
+						v-for="(item, i) in filteredCustomers(element.specialist)"
+						:key="i"
 					>
 						<td>{{ item.customer }}</td>
 					</tr>

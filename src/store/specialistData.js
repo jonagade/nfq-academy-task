@@ -106,7 +106,7 @@ export default {
         importSpecialistData({dispatch, commit, state}, payload) {
             commit('setLoadingState', true);
             commit('setHideButton', true);
-            axios.get('https://api.myjson.com/bins/ipa2x').then(response => {
+            axios.get('https://api.myjson.com/bins/rrznl').then(response => {
                 response.data.forEach((item, i) => {
                     localStorage.setItem('item' + i, JSON.stringify(item));
                 });

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="row justify-content-center">
-			<h3 class="title my-3">Customer Page</h3>
+			<Title name="Customer Page" :show="true" />
 			<Input
 				placeholder="Enter Your Number"
 				:model.sync="customerNumber"
@@ -14,8 +14,11 @@
 				@click="checkTime(customerNumber)"
 			/>
 		</div>
+		<div class="row justify-content-center mt-3" v-show="showTime && !message.show">
+			<p>Waiting time left: <strong>{{ timeLeft }}</strong> seconds</p>
+		</div>
 		<div class="row justify-content-center mt-3" v-show="showTime">
-			<h4>Waiting time left: {{ timeLeft }} seconds</h4>
+			<p class="error-message">{{ message.text }}</p>
 		</div>
 	</div>
 </template>
@@ -24,11 +27,13 @@
 	import { mapGetters, mapActions } from 'vuex';
 	import Input from '../../components/Input';
 	import Button from '../../components/Button';
+	import Title from '../../components/Title';
 
     export default {
 		components: {
 		    Input,
 			Button,
+			Title,
 		},
 
 	    data() {
@@ -37,6 +42,7 @@
 			    timeLeft: null,
 			    interval: null,
 			    showTime: false,
+			    message: '',
 		    }
 	    },
 
@@ -46,7 +52,7 @@
 		    ]),
 
 		    calculateTime(customerNumber) {
-                let customerData = this.specialistDataArray.find(specialist => {
+                const customerData = this.specialistDataArray.find(specialist => {
                     return specialist.customer === customerNumber;
                 });
                 const specialist = this.timePerSpecialist.find(element => {
@@ -57,8 +63,8 @@
                     return element.specialist === specialist.specialist;
                 }).customers;
                 const checkTimestamp = Math.floor(Date.now() / 1000);
-                let inLineBefore = customersInLineBySpecialist.indexOf(customerData);
-                let timeLeft = customerData.creationTimestamp - checkTimestamp + (specialistAverage * inLineBefore);
+                const inLineBefore = customersInLineBySpecialist.indexOf(customerData);
+                const timeLeft = customerData.creationTimestamp - checkTimestamp + (specialistAverage * inLineBefore);
 			    if (inLineBefore > 0 && timeLeft > 0) {
                     this.timeLeft = timeLeft;
                 } else {
@@ -68,15 +74,27 @@
 		    },
 
 		    checkTime(customerNumber) {
-		        this.calculateTime(customerNumber);
-	            this.interval = setInterval(() => {
-		            this.calculateTime(customerNumber);
-	            }, 5000)
+		        const customerInLine = this.waitingCustomers.find(element => {
+		            return element.customer === customerNumber;
+		        });
+		        if (customerInLine === undefined) {
+		            this.message = {
+		                show: true,
+			            text: 'Number not found. Try different number.',
+		            };
+                    this.showTime = true;
+		        } else {
+                    this.calculateTime(customerNumber);
+                    this.message = '';
+                    this.interval = setInterval(() => {
+                        this.calculateTime(customerNumber);
+                    }, 5000);
+		        }
 		    },
 
 		    differentCustomer(interval) {
 		        clearInterval(interval);
-		    }
+		    },
 	    },
 
 	    computed: {
@@ -100,12 +118,13 @@
 			                return element.specialist === specialist;
 			            })
 		            }
-		        })
-		    }
+		        });
+		    },
 	    },
     }
 </script>
 
 <style scoped>
 	@import '../../assets/styles/global.scss';
+	@import '../../assets/styles/customer.scss';
 </style>

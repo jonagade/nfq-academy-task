@@ -5,21 +5,25 @@
 			<Button
 				v-show="!hideButton"
 				name="Import Data"
+				classes="btn-success"
 				@click="importData"
 			/>
 			<div class="spinner-border text-success" v-show="loadingState"></div>
 			<Button
 				name="Board Page"
+				classes="btn-success"
 				@click="toBoardPage"
 				v-show="isDataImported"
 			/>
 			<Button
 				name="Specialist Page"
+				classes="btn-success"
 				@click="toSpecialistPage"
 				v-show="isDataImported"
 			/>
 			<Button
 				name="Customer Page"
+				classes="btn-success"
 				@click="toCustomerPage"
 				v-show="isDataImported"
 			/>
@@ -39,6 +43,7 @@
 			<div class="row mt-3 justify-content-center">
 				<Button
 					name="Register"
+					classes="btn-success"
 					@click="createNewCustomer"
 				/>
 			</div>

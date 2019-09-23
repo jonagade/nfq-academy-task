@@ -18,6 +18,7 @@
 						<td v-show="!item.served">
 							<Button
 								name="Served"
+								classes="btn-success"
 								@click="customerServed(item)"
 							/>
 						</td>

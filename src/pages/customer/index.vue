@@ -11,14 +11,21 @@
 		<div class="row justify-content-center">
 			<Button
 				name="Check Time"
+				classes="btn-success"
 				@click="checkTime(customerNumber)"
 			/>
+			<Button
+				v-show="showTime && !message.show"
+				name="Cancel"
+				classes="btn-danger"
+				@click="cancelMeeting(customerNumber)"
+			/>
 		</div>
-		<div class="row justify-content-center mt-3" v-show="showTime && !message.show">
-			<p>Waiting time left: <strong>{{ timeLeft }}</strong> seconds</p>
-		</div>
-		<div class="row justify-content-center mt-3" v-show="showTime">
-			<p class="error-message">{{ message.text }}</p>
+		<div class="row justify-content-center mt-3">
+			<p v-show="showTime && !message.show">
+				Waiting time left: <strong>{{ timeLeft }}</strong> seconds
+			</p>
+			<p v-if="showTime" class="error-message">{{ message.text }}</p>
 		</div>
 	</div>
 </template>
@@ -49,6 +56,7 @@
 	    methods: {
 		    ...mapActions([
 		        'checkCustomerByNumber',
+			    'cancelCustomer',
 		    ]),
 
 		    calculateTime(customerNumber) {
@@ -90,6 +98,32 @@
                         this.calculateTime(customerNumber);
                     }, 5000);
 		        }
+		    },
+
+		    cancelMeeting(customerNumber) {
+                const customerInLine = this.waitingCustomers.find(element => {
+                    return element.customer === customerNumber;
+                });
+                const customerBeingCancelled = this.specialistDataArray.find(element => {
+                    return element.customer === customerNumber
+                });
+			    const customerIndex = this.specialistDataArray.indexOf(customerBeingCancelled);
+				if (customerInLine === undefined) {
+                    this.message = {
+                        show: true,
+                        text: `Can't cancel meeting, because number does not exist.`,
+                    };
+				} else {
+					const payload = {
+					    ...customerBeingCancelled,
+						customerIndex,
+					};
+					this.cancelCustomer(payload);
+					this.message = {
+					    show: true,
+						text: 'Meeting cancelled successfully.'
+					}
+				}
 		    },
 
 		    differentCustomer(interval) {

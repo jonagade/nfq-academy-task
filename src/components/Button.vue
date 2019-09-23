@@ -1,6 +1,7 @@
 <template>
 	<button
-		class="btn btn-success mx-2"
+		class="btn mx-2"
+		:class="classes"
 		@click.prevent="$emit('click')"
 	>
 		{{ name }}
@@ -11,6 +12,7 @@
     export default {
         props: [
             'name',
+	        'classes',
         ],
     }
 </script>

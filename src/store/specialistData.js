@@ -12,6 +12,8 @@ export default {
         registrationMessage: '',
         errorMessage: '',
         timePerSpecialist: [],
+        hideButton: false,
+        loadingState: false,
     },
 
     getters: {
@@ -37,7 +39,15 @@ export default {
 
         timePerSpecialist(state) {
             return state.timePerSpecialist;
-        }
+        },
+
+        hideButton(state) {
+            return state.hideButton;
+        },
+
+        loadingState(state) {
+            return state.loadingState;
+        },
     },
 
     mutations: {
@@ -60,6 +70,14 @@ export default {
         setTimePerSpecialist(state, payload) {
             state.timePerSpecialist = payload;
         },
+
+        setHideButton(state, payload) {
+            state.hideButton = payload;
+        },
+
+        setLoadingState(state, payload) {
+            state.loadingState = payload;
+        },
     },
 
     actions: {
@@ -74,7 +92,7 @@ export default {
                 }
             }
             let specialistTimeArray = [];
-            for (let i = 1; i < localStorage.length; i++) {
+            for (let i = 1; i <= localStorage.length; i++) {
                 let specialist = JSON.parse(localStorage.getItem('specialist' + i));
                 if (specialist !== null) {
                     specialistTimeArray.push(specialist);
@@ -86,11 +104,13 @@ export default {
         },
 
         importSpecialistData({dispatch, commit, state}, payload) {
+            commit('setLoadingState', true);
+            commit('setHideButton', true);
             axios.get('https://api.myjson.com/bins/ipa2x').then(response => {
                 response.data.forEach((item, i) => {
                     localStorage.setItem('item' + i, JSON.stringify(item));
                 });
-                let customerDataBySpecialist = state.specialists.map(specialist => {
+                const customerDataBySpecialist = state.specialists.map(specialist => {
                     return {
                         specialist: specialist,
                         specialistData: response.data.filter(element => {
@@ -98,8 +118,8 @@ export default {
                         })
                     }
                 });
-                let workStarted = state.specialists.map(specialist => {
-                    let currentSpecialist = customerDataBySpecialist.find(element => {
+                const workStarted = state.specialists.map(specialist => {
+                    const currentSpecialist = customerDataBySpecialist.find(element => {
                         return element.specialist === specialist;
                     }).specialistData;
                     const average = currentSpecialist.reduce((total, next) => total + next.timeSpent, 0) / currentSpecialist.length;
@@ -116,15 +136,17 @@ export default {
                 dispatch('refreshData');
             }).catch(() => {
                 commit('setErrorMessage', 'Customer data import failed. Please try again later.')
+            }).finally(() => {
+                commit('setLoadingState', false);
             })
         },
 
         updateCustomer({dispatch, state}, payload) {
             localStorage.removeItem('item' + payload.servedCustomerIndex);
-            let specialist = state.timePerSpecialist.find(element => {
+            const specialist = state.timePerSpecialist.find(element => {
                 return element.specialist === payload.specialist;
             });
-            let specialistNumber = state.timePerSpecialist.indexOf(specialist);
+            const specialistNumber = state.timePerSpecialist.indexOf(specialist);
             const updatedSpecialist = {
                 specialist: specialist.specialist,
                 averageTime: specialist.averageTime,
@@ -151,7 +173,7 @@ export default {
         },
 
         createCustomer({dispatch, state, commit}, payload) {
-            let currentSpecialistCustomers = state.specialistDataArray.filter(element => {
+            const currentSpecialistCustomers = state.specialistDataArray.filter(element => {
                 return element.specialist === payload.specialist;
             });
             const customerData = {
@@ -161,7 +183,7 @@ export default {
             };
             localStorage.setItem('item' + state.specialistDataArray.length, JSON.stringify(customerData));
             dispatch('refreshData');
-            commit('setRegistrationMessage', `Registration was successful. Your number is: ${customerData.customer}`);
+            commit('setRegistrationMessage', `Registration was successful. Your number is: ${customerData.customer}.`);
         },
     },
 }

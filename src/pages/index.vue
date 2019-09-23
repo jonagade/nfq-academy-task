@@ -1,11 +1,13 @@
 <template>
 	<div>
-		<h3 class="title my-3">Administration page</h3>
+		<Title name="Administration Page" :show="true" />
 		<div class="row justify-content-center">
 			<Button
+				v-show="!hideButton"
 				name="Import Data"
 				@click="importData"
 			/>
+			<div class="spinner-border text-success" v-show="loadingState"></div>
 			<Button
 				name="Board Page"
 				@click="toBoardPage"
@@ -25,6 +27,7 @@
 		<div class="row justify-content-center mt-3">
 			<span>{{ errorMessage }}</span>
 		</div>
+		<Title name="Registration" :show="isDataImported" />
 		<div v-show="isDataImported">
 			<div class="row mt-3">
 				<Select
@@ -40,7 +43,7 @@
 				/>
 			</div>
 			<div class="row mt-3 justify-content-center">
-				<span>{{ registrationMessage }}</span>
+				<span class="message-color">{{ registrationMessage }}</span>
 			</div>
 		</div>
 	</div>
@@ -51,11 +54,13 @@
     import router from '../router';
     import Button from '../components/Button';
     import Select from '../components/Select';
+    import Title from '../components/Title';
 
     export default {
         components: {
             Button,
 	        Select,
+	        Title,
         },
 
 	    data() {
@@ -103,15 +108,17 @@
 	            'isDataImported',
 	            'registrationMessage',
 	            'errorMessage',
+	            'hideButton',
+	            'loadingState',
             ]),
 
 		    specialistsWithCode() {
                 return this.specialists.map((specialist, i) => {
                     return {
                         name: specialist,
-	                    code: i + 1 + '00',
+	                    code: i + 1 + '000',
                     }
-                })
+                });
 		    },
 
 		    selectedSpecialistCode() {
@@ -122,11 +129,12 @@
                 } else {
                     return ''
                 }
-		    }
-	    }
+		    },
+	    },
     }
 </script>
 
 <style scoped lang="scss">
-	@import '../assets/styles/global';
+	@import '../assets/styles/global.scss';
+	@import '../assets/styles/admin.scss';
 </style>

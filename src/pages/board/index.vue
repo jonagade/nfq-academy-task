@@ -46,7 +46,7 @@
         computed: {
             ...mapGetters([
                 'specialistDataArray',
-	            'timePerSpecialist'
+	            'timePerSpecialist',
             ]),
         },
     }

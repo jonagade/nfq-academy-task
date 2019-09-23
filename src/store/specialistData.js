@@ -185,5 +185,16 @@ export default {
             dispatch('refreshData');
             commit('setRegistrationMessage', `Registration was successful. Your number is: ${customerData.customer}.`);
         },
+
+        cancelCustomer({dispatch}, payload) {
+            const cancelledCustomer = {
+                specialist: payload.specialist,
+                customer: payload.customer,
+                served: 'cancelled',
+            };
+            localStorage.removeItem('item' + payload.customerIndex);
+            localStorage.setItem('item' + payload.customerIndex, JSON.stringify(cancelledCustomer));
+            dispatch('refreshData');
+        }
     },
 }
